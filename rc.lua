@@ -1,9 +1,6 @@
-
 --[[
-                                       
-     Awesome WM configuration template 
-     github.com/copycat-killer         
-                                       
+  Awesome WM configuratio template
+  github.com/copycat-killer
 --]]
 
 -- {{{ Required libraries
@@ -211,7 +208,7 @@ root.buttons(awful.util.table.join(
 globalkeys = awful.util.table.join(
     -- Take a screenshot
     -- https://github.com/copycat-killer/dots/blob/master/bin/screenshot
-    awful.key({ altkey }, "p", function() os.execute("screenshot") end),
+    --awful.key({}, "#107", function() os.execute("gscreenshot") end),
 
     -- Hotkeys
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
@@ -470,13 +467,13 @@ clientkeys = awful.util.table.join(
               {description = "move to screen", group = "client"}),
     awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end,
               {description = "toggle keep on top", group = "client"}),
-    awful.key({ modkey,           }, "n",
-        function (c)
-            -- The client currently has the input focus, so it cannot be
-            -- minimized, since minimized clients can't have the focus.
-            c.minimized = true
-        end ,
-        {description = "minimize", group = "client"}),
+    --awful.key({ modkey,           }, "n",
+        --function (c)
+            ---- The client currently has the input focus, so it cannot be
+            ---- minimized, since minimized clients can't have the focus.
+            --c.minimized = true
+        --end ,
+        --{description = "minimize", group = "client"}),
     awful.key({ modkey,           }, "m",
         function (c)
             c.maximized = not c.maximized
@@ -574,7 +571,7 @@ awful.rules.rules = {
 
     -- Titlebars
     { rule_any = { type = { "dialog", "normal" } },
-      properties = { titlebars_enabled = true } },
+      properties = { titlebars_enabled = false } },
 
     -- Set Firefox to always map on the first tag on screen 1.
     { rule = { class = "Firefox" },

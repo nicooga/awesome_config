@@ -6,28 +6,41 @@
                                       
 --]]
 
-local gears = require("gears")
-local lain  = require("lain")
-local awful = require("awful")
-local wibox = require("wibox")
-local os    = { getenv = os.getenv }
+local gears            = require("gears")
+local lain             = require("lain")
+local awful            = require("awful")
+local wibox            = require("wibox")
+local layout_indicator = require("keyboard-layout-indicator")
+local os               = { getenv = os.getenv }
+
+keyboard_layout = layout_indicator({
+  layouts = {
+    {name="lt", layout="latam", variant=nil},
+  }
+})
+
+local pallete = {
+  primary   = "#354755", -- "#1A1A1A"
+  secondary = "#adbed5", -- "#CC9393"
+  accent    = "#9da7b3"  -- "#EA6F81"
+}
 
 local theme                                     = {}
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/powerarrow-dark"
 --theme.wallpaper                                 = theme.dir .. "/wall.png"
-theme.wallpaper                                 = os.getenv("HOME") .. "/Pictures/Wallpapers/minimalist_circle.jpg"
+theme.wallpaper                                 = os.getenv("HOME") .. "/Pictures/Wallpapers/the_last_of_us.jpg"
 theme.font                                      = "xos4 Terminus 9"
 theme.fg_normal                                 = "#DDDDFF"
-theme.fg_focus                                  = "#EA6F81"
-theme.fg_urgent                                 = "#CC9393"
-theme.bg_normal                                 = "#1A1A1A"
+theme.fg_focus                                  = pallete.accent
+theme.fg_urgent                                 = pallete.secondary
+theme.bg_normal                                 = pallete.primary
 theme.bg_focus                                  = "#313131"
-theme.bg_urgent                                 = "#1A1A1A"
+theme.bg_urgent                                 = pallete.primary
 theme.border_width                              = 1
 theme.border_normal                             = "#3F3F3F"
 theme.border_focus                              = "#7F7F7F"
-theme.border_marked                             = "#CC9393"
-theme.tasklist_bg_focus                         = "#1A1A1A"
+theme.border_marked                             = pallete.secondary
+theme.tasklist_bg_focus                         = pallete.primary
 theme.titlebar_bg_focus                         = theme.bg_focus
 theme.titlebar_bg_normal                        = theme.bg_normal
 theme.titlebar_fg_focus                         = theme.fg_focus
@@ -162,7 +175,7 @@ theme.mpd = lain.widget.mpd({
             mpdicon:set_image(theme.widget_music)
         end
 
-        widget:set_markup(markup.font(theme.font, markup("#EA6F81", artist) .. title))
+        widget:set_markup(markup.font(theme.font, markup(pallete.accent, artist) .. title))
     end
 })
 
@@ -203,6 +216,7 @@ theme.fs = lain.widget.fs({
 -- Battery
 local baticon = wibox.widget.imagebox(theme.widget_battery)
 local bat = lain.widget.bat({
+    battery = 'BAT1',
     settings = function()
         if bat_now.status ~= "N/A" then
             if bat_now.ac_status == 1 then
@@ -267,7 +281,8 @@ function theme.at_screen_connect(s)
     if type(wallpaper) == "function" then
         wallpaper = wallpaper(s)
     end
-    gears.wallpaper.maximized(wallpaper, s, true)
+    --gears.wallpaper.maximized(wallpaper, s, true)
+    gears.wallpaper.centered(wallpaper, s)
 
     -- Tags
     awful.tag(awful.util.tagnames, s, awful.layout.layouts)
@@ -306,14 +321,15 @@ function theme.at_screen_connect(s)
             layout = wibox.layout.fixed.horizontal,
             wibox.widget.systray(),
             spr,
+            --arrl_ld,
+            --wibox.container.background(mpdicon, theme.bg_focus),
+            --wibox.container.background(theme.mpd.widget, theme.bg_focus),
             arrl_ld,
-            wibox.container.background(mpdicon, theme.bg_focus),
-            wibox.container.background(theme.mpd.widget, theme.bg_focus),
-            arrl_dl,
-            volicon,
-            theme.volume.widget,
-            arrl_ld,
-            wibox.container.background(mailicon, theme.bg_focus),
+            wibox.container.background(arrl_dl, theme.bg_focus),
+            wibox.container.background(volicon, theme.bg_focus),
+            wibox.container.background(theme.volume.widget, theme.bg_focus),
+            --arrl_ld,
+            --wibox.container.background(mailicon, theme.bg_focus),
             --wibox.container.background(mail.widget, theme.bg_focus),
             arrl_dl,
             memicon,
@@ -335,8 +351,11 @@ function theme.at_screen_connect(s)
             wibox.container.background(net.widget, theme.bg_focus),
             arrl_dl,
             clock,
-            spr,
             arrl_ld,
+            wibox.container.background(spr, theme.bg_focus),
+            wibox.container.background(keyboard_layout.widget, theme.bg_focus),
+            wibox.container.background(arrl_ld, theme.bg_focus),
+            --arrl_ld,
             wibox.container.background(s.mylayoutbox, theme.bg_focus),
         },
     }
